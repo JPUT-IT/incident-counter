@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      font-size: 36px;
+      margin: 0;
+      padding: 40px;
+      background-color: #f8f8f8;
+    }
+    #counter {
+      font-weight: bold;
+      color: #0078d4;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="counter">Loading...</div>
+  <button onclick="resetDate()">Reset Counter</button>
+
+  <script>
+    const STORAGE_KEY = "incidentStartDate";
+
+    function getStartDate() {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      return stored ? new Date(stored) : new Date("2024-12-01");
+    }
+
+    function updateCounter() {
+      const startDate = getStartDate();
+      const today = new Date();
+      startDate.setHours(0, 0, 0, 0);
+      today.setHours(0, 0, 0, 0);
+      const diffTime = today - startDate;
+      const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      document.getElementById("counter").innerText = `${diffDays} Days Since Last Incident`;
+    }
+
+    function resetDate() {
+      const confirmReset = confirm("Reset the counter to today?");
+      if (confirmReset) {
+        const today = new Date();
+        localStorage.setItem(STORAGE_KEY, today.toISOString());
+        updateCounter();
+      }
+    }
+
+    updateCounter();
+  </script>
+</body>
+</html>
